@@ -1,4 +1,4 @@
-# Bank Sampah Budi Luhur [BSBL]
+# Bank Sampah Teratai [BST]
 ## Required
 <ul>
     <li> NodeJS 16.13.0 </li>
