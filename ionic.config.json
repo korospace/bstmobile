@@ -1,0 +1,7 @@
+{
+  "name": "Bank Sampah Budi Luhur",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
