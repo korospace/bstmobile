@@ -8,7 +8,7 @@ export default createStore({
     return {
       APIURL   : "https://banksampah.budiluhur.ac.id/bst",
       // APIURL   : "https://t-gadgetcors.herokuapp.com/https://bsbl.herokuapp.com",
-      linkAdmin: "https://wa.me/6281287200602?text=Hallo%20Admin,%20saya%20ada%20kendala%20mengenai%20password",
+      linkAdmin: "https://wa.me/628569886410?text=Hallo%20Admin,%ada%20yang%20ingin%20saya%20tanyakan",
       dataSaldo : "",
       dataNasabah : "",
       dataArticles : "",
