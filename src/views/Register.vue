@@ -257,7 +257,7 @@
                         </svg>
                         <input
                           type="text" placeholder="masukan nama wilayah" v-model="searchKeyCom"
-                          class="w-full py-1.5 pl-7 pr-1.5 text-xs text-gray-700 tracking-wide focus:outline-none">
+                          class="w-full py-1.5 pl-7 pr-1.5 bg-white text-xs text-gray-700 tracking-wide focus:outline-none">
                     </div>
 
                     <div
