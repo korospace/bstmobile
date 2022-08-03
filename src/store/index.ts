@@ -6,7 +6,7 @@ import router           from "@/router";
 export default createStore({
   state() {
     return {
-      APIURL   : "https://banksampah.budiluhur.ac.id/bst",
+      APIURL   : "https://banksampah.budiluhur.ac.id/bst_web",
       // APIURL   : "https://t-gadgetcors.herokuapp.com/https://bsbl.herokuapp.com",
       linkAdmin: "https://wa.me/628569886410?text=Hallo%20Admin,%20ada%20yang%20ingin%20saya%20tanyakan",
       dataSaldo : "",
