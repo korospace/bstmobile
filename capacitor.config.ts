@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'id.ac.budiluhur.banksampah',
-  appName: 'Bank Sampah Budi Luhur',
+  appId: 'com.bstpinangpermai',
+  appName: 'Bank Sampah Teratai',
   webDir: 'dist',
   bundledWebRuntime: false,
   plugins: {
