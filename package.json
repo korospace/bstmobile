@@ -1,5 +1,5 @@
 {
-  "name": "bsblmobile",
+  "name": "bstmobile",
   "version": "0.0.1",
   "private": true,
   "description": "An Ionic project",
@@ -12,7 +12,7 @@
     "resources": "capacitor-resources -p android"
   },
   "dependencies": {
-    "@capacitor/android": "3.4.1",
+    "@capacitor/android": "3.3.2",
     "@capacitor/app": "1.0.6",
     "@capacitor/core": "^3.4.0",
     "@capacitor/haptics": "1.1.3",
