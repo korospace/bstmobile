@@ -11,7 +11,15 @@
                         <input class="text-center text-gray-600 text-xl sm360:text-3xl tracking-widest border-solid border-b-4 focus:outline-none border-lime-400 bg-transparent py-2 w-3/4 sm360:w-44 placeholder-gray-300" type="text" name="otp" placeholder="your OTP" autocomplete="off" v-model="otpVal"
                         @input="sendOtp"/>
                     </form>
-                    <p class="text-white text-xs sm360:text-md opacity-90">Belum menerima kode OTP?</p>
+                    <p class="text-white text-xs sm360:text-md opacity-90">
+                        Belum menerima kode OTP?
+                        <a 
+                          href="" 
+                          class="text-white font-extrabold"
+                          @click.prevent="resendOtp()">
+                            kirim ulang
+                        </a>
+                    </p>
                     <a :href="linkAdmin" class="text-center text-white mb-8 text-xs sm360:text-md underline underline-offset-8 opacity-90">Hubungi Admin</a>
                 </div>
             </div>
@@ -102,7 +110,7 @@ export default defineComponent({
                                   .then((response) => {
                                     loading.dismiss();
                                     TokenService.saveToken(response.data.token);
-                                    router.push("/tabs/dashboard");
+                                    router.push("/dashboard");
                                   })
                                   .catch((error) => {
                                     loading.dismiss();
@@ -136,11 +144,60 @@ export default defineComponent({
             }
         }
 
+        // -- resend OTP
+        const resendOtp = async () => {
+            const loading = await createSpinner();
+            loading.present();
+
+            const form    = new FormData();
+            form.set('username_or_email',username_or_email.value);
+
+            axios
+                .post(`${store.state.APIURL}/otp/resend`, form)
+                .then((response) => {
+                    loading.dismiss();
+
+                    store.commit('setDataAlert',{show:true,type:'success',message:`kode OTP sudah terkirim, cek email anda!`});
+
+                    setTimeout(() => {
+                        store.commit('setDataAlert',{show:false,type:'',message:``});
+                    }, 3000);
+                })
+                .catch((error) => {
+                    loading.dismiss();
+
+                    // bad requ
+                    if (error.response.status == 400) {
+                        store.commit('setDataAlert',{show:true,type:'warning',message:error.response.data.messages});
+
+                        setTimeout(() => {
+                            store.commit('setDataAlert',{show:false,type:'',message:``});
+                        }, 5000);
+                    }
+                    else if (error.response.status == 404) {
+                        store.commit('setDataAlert',{show:true,type:'warning',message:'akun tidak ditemukan'});
+
+                        setTimeout(() => {
+                            store.commit('setDataAlert',{show:false,type:'',message:``});
+                        }, 5000);
+                    }
+                    // error server
+                    else if (error.response.status == 500) {
+                        store.commit('setDataAlert',{show:true,type:'danger',message:`<b>terjadi kesalahan.</b> silahkan coba lagi`});
+
+                        setTimeout(() => {
+                            store.commit('setDataAlert',{show:false,type:'',message:``});
+                        }, 5000);
+                    }
+                })
+        }
+
         return{
             router,
             store,
             otpVal,
             sendOtp,
+            resendOtp,
             linkAdmin
         }
     }

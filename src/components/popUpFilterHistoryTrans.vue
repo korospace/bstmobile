@@ -22,13 +22,13 @@
                         </span>
                         <input
                           name="inputStart" type="date" v-model="startDate"
-                          class="w-full border-2 border-gray-400 rounded p-2 focus:outline-none">
+                          class="w-full border-2 border-gray-400 rounded p-2 focus:outline-none bg-white">
                         <span class="w-max text-xs px-1 bg-white transform translate-y-4 translate-x-1.5 mt-4">
                             Tanggal berakhir
                         </span>
                         <input
                           name="inputEnd" type="date" v-model="endDate"
-                          class="w-full border-2 border-gray-400 rounded p-2 mt-3 focus:outline-none">
+                          class="w-full border-2 border-gray-400 rounded p-2 mt-3 focus:outline-none bg-white">
                     </div>
                     <!-- footer -->
                     <div class="p-3 flex justify-end">
