@@ -34,13 +34,13 @@ const registerSchema = Yup.object().shape({
         .required(' '),
     rt: Yup.string()
         .required(' ')
-        .max(3, 'maksimal 3 character')
-        .min(3, 'minimal 3 character')
+        .max(2, 'maksimal 2 character')
+        .min(2, 'minimal 2 character')
         .matches(/^\d+$/, 'hanya boleh angka'),
     rw: Yup.string()
         .required(' ')
-        .max(3, 'maksimal 3 character')
-        .min(3, 'minimal 3 character')
+        .max(2, 'maksimal 2 character')
+        .min(2, 'minimal 2 character')
         .matches(/^\d+$/, 'hanya boleh angka'),
     alamat: Yup.string()
         .required(' ')
