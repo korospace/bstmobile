@@ -134,9 +134,9 @@ export default defineComponent({
 
     // -- ID Nasabah --
     const idNasabah = computed(() => {
-      const id = (store.state.dataNasabah.id) ? store.state.dataNasabah.id : "";
+      return (store.state.dataNasabah.id) ? store.state.dataNasabah.id : "";
       
-      return `${id.slice(0, 5)}&nbsp;&nbsp;&nbsp;${id.slice(5, 9)}&nbsp;&nbsp;&nbsp;${id.slice(9,99999999)}`;
+      // return `${id.slice(0, 5)}&nbsp;&nbsp;&nbsp;${id.slice(5, 9)}&nbsp;&nbsp;&nbsp;${id.slice(9,99999999)}`;
     });
 
     // -- Tanggal bergabung --

@@ -48,12 +48,14 @@
                 </div>
 
                 <!-- Email -->
+                <!-- :active="dataNasabah.email == null ? '' : dataNasabah.email" -->
                 <small v-if="editMode" class="text-sm text-gray-400">
                   Email
                 </small>
                 <div v-if="editMode" class="mt-1.5 text-lg text-gray-600 mb-6 relative">
                   <Field
                     type="email" name="email" v-model="dataNasabah.email"
+                    :active="dataNasabah.email == null ? '' : dataNasabah.email"
                     placeholder="Email" autocomplete="off" 
                     @keyup="clearErrorExist" 
                     class="block py-2 px-3 w-full border-b-2 border-gray-400 focus:outline-none bg-gray-100 focus:bg-gray-200"
@@ -174,9 +176,24 @@
                 <small v-if="!editMode" class="text-sm text-gray-400">
                   NIK
                 </small>
-                <div v-if="!editMode" class="flex mt-1.5 text-lg text-gray-600 capitalize mb-6 relative">
-                  <div class="bg-gradient-to-t from-greenbsbl-old to-greenbsbl-young pl-1 opacity-70"></div>
-                  <div class="py-2 px-3">{{ dataNasabah.nik }}</div>
+                <div class="mt-1.5 text-lg text-gray-600 mb-6 relative">
+                  <div class="flex" :class="{'hidden':editMode}">
+                    <div class="bg-gradient-to-t from-greenbsbl-old to-greenbsbl-young pl-1 opacity-70"></div>
+                    <div class="py-2 px-3">{{ dataNasabah.nik }}</div>
+                  </div>
+
+                  <Field
+                    type="text" name="nik" v-model="dataNasabah.nik"
+                    placeholder="NIK" autocomplete="off" 
+                    @keyup="clearErrorExist" 
+                    class="block py-2 px-3 w-full border-b-2 border-gray-400 focus:outline-none bg-gray-100 focus:bg-gray-200"
+                    :class="{'hidden':!editMode,'border-red-500':errors.nik||nikIsExist}" />
+                  <small class="absolute transform -translate-y-1 tracking-wide text-red-500">
+                      {{ errors.nik }}
+                  </small>
+                  <small v-if="nikIsExist" class="absolute transform -translate-y-1 tracking-wide text-red-500">
+                      nik sudah dipakai
+                  </small>
                 </div>
 
                 <!-- Alamat -->
@@ -286,6 +303,7 @@ export default defineComponent({
     const emailIsExist    = ref(false);
     const usernameIsExist = ref(false);
     const notelplIsExist  = ref(false);
+    const nikIsExist      = ref(false);
     const newPass  = reactive({
       value: "",
       status: false,
@@ -302,7 +320,7 @@ export default defineComponent({
     })
 
     const tglLahirEditMode = computed(() => {
-      const tglLahir = (dataNasabah.value.tgl_lahir) ? dataNasabah.value.tgl_lahir.split('-') : "";
+      const tglLahir = (dataNasabah.value.tgl_lahir != "00-00-000" && dataNasabah.value.tgl_lahir != undefined) ? dataNasabah.value.tgl_lahir.split('-') : "";
       const newTgl   = (tglLahir.length != 0) ? `${tglLahir[2]}-${tglLahir[1]}-${tglLahir[0]}` : ""
       return newTgl;
     })
@@ -316,6 +334,9 @@ export default defineComponent({
       }
       else if (event.target.name == 'notelp') {
         notelplIsExist.value = false;
+      }
+      else if (event.target.name == 'nik') {
+        nikIsExist.value = false;
       }
       else if (event.target.name == 'new_password') {
         newPass.status  = false;
@@ -333,6 +354,7 @@ export default defineComponent({
       emailIsExist.value     = false;
       usernameIsExist.value  = false;
       notelplIsExist.value   = false;
+      nikIsExist.value       = false;
       newPass.status  = false;
       newPass.message = '';
       oldPass.status  = false;
@@ -361,24 +383,23 @@ export default defineComponent({
       }
 
       newProfileData["id"]  = dataNasabah.value.id; 
-      newProfileData["nik"] = dataNasabah.value.nik;
 
       // -- New Password Validation --
       if (formEditProfile.get('new_password')) {
-        const newPass = formEditProfile.get('new_password');
+        const newPassval = formEditProfile.get('new_password');
         let isInvalid = false;
 
-        if (newPass.length < 8 || newPass.length > 20) {
+        if (newPassval.length < 7 || newPassval.length > 20) {
           newPass.status  = true;
-          newPass.message = 'minimal 8 huruf dan maksimal 20 huruf';
+          newPass.message = 'minimal 7 huruf dan maksimal 20 huruf';
           isInvalid = true;
         }
-        if (/\s/.test(newPass)) {
+        if (/\s/.test(newPassval)) {
           newPass.status  = true;
           newPass.message = 'tidak boleh ada spasi';
           isInvalid = true;
         }
-        if (event.old_password === undefined) {
+        if (event.old_password == undefined || event.old_password == "") {
           oldPass.status  = true;
           oldPass.message = 'password lama harus di isi';
           isInvalid = true;
@@ -422,6 +443,9 @@ export default defineComponent({
             }
             if (error.response.data.messages.notelp) {
               notelplIsExist.value = true;
+            }
+            if (error.response.data.messages.nik) {
+              nikIsExist.value = true;
             }
             if (error.response.data.messages.old_password) {
               oldPass.status  = true;
@@ -492,6 +516,7 @@ export default defineComponent({
       emailIsExist,
       usernameIsExist,
       notelplIsExist,
+      nikIsExist,
       newPass,
       oldPass,
       clearErrorExist,

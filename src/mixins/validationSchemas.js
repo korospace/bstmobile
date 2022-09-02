@@ -10,14 +10,14 @@ const registerSchema = Yup.object().shape({
         .max(40, 'maksimal 40 karakter'),
     username: Yup.string()
         .required(' ')
-        .min(8, 'minimal 8 karakter')
+        .min(7, 'minimal 7 karakter')
         .max(20, 'maksimal 20 karakter'),
     email: Yup.string()
         .required(' ')
         .email('email tidak valid'),
     password: Yup.string()
         .required(' ')
-        .min(8, 'minimal 8 karakter')
+        .min(7, 'minimal 7 karakter')
         .max(20, 'maksimal 20 karakter'),
     notelp: Yup.string()
         .required(' ')
@@ -55,10 +55,11 @@ const profileSchema = Yup.object().shape({
         .max(40, 'maksimal 40 karakter'),
     username: Yup.string()
         .required(' ')
-        .min(8, 'minimal 8 karakter')
+        .min(7, 'minimal 7 karakter')
         .max(20, 'maksimal 20 karakter'),
     email: Yup.string()
         .required(' ')
+        .nullable()
         .email('email tidak valid'),
     // password: Yup.string()
     //     .required(' ')
@@ -66,14 +67,22 @@ const profileSchema = Yup.object().shape({
     //     .max(20, 'maksimal 20 karakter'),
     notelp: Yup.string()
         .required(' ')
+        .nullable()
         .max(14, 'maksimal 14 character')
         .matches(/^\d+$/, 'nomor tidak valid'),
+    nik: Yup.string()
+        .required(' ')
+        .nullable()
+        .max(16, 'masukan nik yang valid')
+        .min(16, 'masukan nik yang valid')
+        .matches(/^\d+$/, 'nik tidak valid'),
     tgl_lahir: Yup.string()
         .required(' '),
     kelamin: Yup.string()
         .required(' '),
     alamat: Yup.string()
         .required(' ')
+        .nullable()
         .max(255, 'maksimal 255 karakter'),
 });
 
