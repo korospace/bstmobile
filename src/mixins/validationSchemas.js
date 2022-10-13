@@ -34,13 +34,13 @@ const registerSchema = Yup.object().shape({
         .required(' '),
     rt: Yup.string()
         .required(' ')
-        .max(2, 'maksimal 2 character')
-        .min(2, 'minimal 2 character')
+        .max(3, 'maksimal 3 character')
+        .min(3, 'minimal 3 character')
         .matches(/^\d+$/, 'hanya boleh angka'),
     rw: Yup.string()
         .required(' ')
-        .max(2, 'maksimal 2 character')
-        .min(2, 'minimal 2 character')
+        .max(3, 'maksimal 3 character')
+        .min(3, 'minimal 3 character')
         .matches(/^\d+$/, 'hanya boleh angka'),
     alamat: Yup.string()
         .required(' ')
@@ -63,7 +63,7 @@ const profileSchema = Yup.object().shape({
         .email('email tidak valid'),
     // password: Yup.string()
     //     .required(' ')
-    //     .min(8, 'minimal 8 karakter')
+    //     .min(7, 'minimal 7 karakter')
     //     .max(20, 'maksimal 20 karakter'),
     notelp: Yup.string()
         .required(' ')
