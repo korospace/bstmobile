@@ -396,9 +396,9 @@ export default defineComponent({
         const newPassval = formEditProfile.get('new_password');
         let isInvalid = false;
 
-        if (newPassval.length < 7 || newPassval.length > 20) {
+        if (newPassval.length < 8 || newPassval.length > 20) {
           newPass.status  = true;
-          newPass.message = 'minimal 7 huruf dan maksimal 20 huruf';
+          newPass.message = 'minimal 8 huruf dan maksimal 20 huruf';
           isInvalid = true;
         }
         if (/\s/.test(newPassval)) {

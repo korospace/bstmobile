@@ -10,14 +10,14 @@ const registerSchema = Yup.object().shape({
         .max(40, 'maksimal 40 karakter'),
     username: Yup.string()
         .required(' ')
-        .min(7, 'minimal 7 karakter')
+        .min(8, 'minimal 8 karakter')
         .max(20, 'maksimal 20 karakter'),
     email: Yup.string()
         .required(' ')
         .email('email tidak valid'),
     password: Yup.string()
         .required(' ')
-        .min(7, 'minimal 7 karakter')
+        .min(8, 'minimal 8 karakter')
         .max(20, 'maksimal 20 karakter'),
     notelp: Yup.string()
         .required(' ')
@@ -55,7 +55,7 @@ const profileSchema = Yup.object().shape({
         .max(40, 'maksimal 40 karakter'),
     username: Yup.string()
         .required(' ')
-        .min(7, 'minimal 7 karakter')
+        .min(8, 'minimal 8 karakter')
         .max(20, 'maksimal 20 karakter'),
     email: Yup.string()
         .required(' ')
