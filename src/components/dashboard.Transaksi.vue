@@ -11,13 +11,19 @@
                   class="font-bold text-md text-gray-500 text-center py-2"
                   style="font-family:QuicksandSemiBold;">
                     Penyetoran sampah</div>
-                <div
-                  class="font-bold text-sm text-gray-500 text-center pb-2 border-b border-gray-200">
-                    {{ dataGrafikSetorDate }}</div>
 
-                <div class="relative mt-4">
+                <div class="flex justify-center">
+                    <select class="w-36 mt-2 border-2 border-gray-400 rounded p-1 focus:outline-none bg-white" :value="currentYear" @change="changeDataGrafikSetor">
+                        <option v-for="x in arrYear"  v-bind:key="x" :value="x">{{x}}</option>
+                    </select>
+                </div>                
+                <!-- <div
+                  class="font-bold text-sm text-gray-500 text-center pb-2 border-b border-gray-200">
+                    {{ dataGrafikSetorDate }}</div> -->
+
+                <div class="relative mt-8">
                     <div
-                      v-if="dataGrafikSetorKg==''"
+                      v-if="Array.isArray(dataGrafikSetorKg) == false"
                       class="absolute z-10 top-0 bottom-0 left-0 right-0 bg-white flex justify-center items-center">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%; display: block; shape-rendering: auto;" width="40px" height="40px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
@@ -28,7 +34,8 @@
                         </span>
                     </div>
                     
-                    <LineChart :chartData="grafikData" :options="grafikOptions" />
+                    <!-- <LineChart :chartData="grafikData" :options="grafikOptions" /> -->
+                    <BarChart :chartData="grafikData" :options="grafikOptions" />
                 </div>
             </div>
             
@@ -138,7 +145,7 @@ import popUpFilterHistoryTrans from '@/components/popUpFilterHistoryTrans.vue';
 import { faExchangeAlt,faPlus,faMinus,faSlidersH,faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 import { Chart, registerables } from 'chart.js';
-import { LineChart }   from 'vue-chart-3';
+import { LineChart,BarChart }   from 'vue-chart-3';
 Chart.register(...registerables);
 
 export default defineComponent({
@@ -146,28 +153,43 @@ export default defineComponent({
         FontAwesomeIcon,
         popUpFilterHistoryTrans,
         LineChart,
+        BarChart,
     },
     setup() {
         const store = useStore();
-        
+        const arrYear = [];
+        const thisYear= new Date(new Date().getTime()).toLocaleString("en-US",{year: "numeric"});
+        const currentYear = computed(() => {
+            return store.state.currYear;
+        });
+
+        for (let index = 2014; index <= thisYear; index++) {
+            arrYear.push(index);            
+        }
+
         const currentTab = computed(() => {
             return store.state.currentDashboardTab;
-        });
-
-        const dataGrafikSetorDate = computed(() => {
-            return store.state.dataGrafikSetor.date;
-        });
-
-        const dataGrafikSetorId = computed(() => {
-            return store.state.dataGrafikSetor.dataId;
         });
 
         const dataGrafikSetorKg = computed(() => {
             return store.state.dataGrafikSetor.dataKg;
         });
 
+        const dataGrafikSetorMonth = computed(() => {
+            return store.state.dataGrafikSetor.dataMonth;
+        });
+
+        const changeDataGrafikSetor = (event) => {
+            store.commit("setDataGrafikSetor",{
+                dataKg: "",
+                dataMonth: "",
+            });
+            store.commit("setCurrYear",event.target.value);
+            store.dispatch("getDataGrafikSetor");
+        }
+
         const grafikData = computed(() => ({
-            labels: dataGrafikSetorId.value,
+            labels: dataGrafikSetorMonth.value,
             datasets: [
                 {
                     data: dataGrafikSetorKg.value,
@@ -267,12 +289,14 @@ export default defineComponent({
 
         return {
             currentTab,
+            arrYear,
+            currentYear,
             historyTransaksi,
             dateParse,
             faExchangeAlt,faPlus,faMinus,faSlidersH,faArrowRight,
             modifUang,
-            dataGrafikSetorDate,
             dataGrafikSetorKg,
+            changeDataGrafikSetor,
             historyTransDate,
             openFilter,
             grafikData,

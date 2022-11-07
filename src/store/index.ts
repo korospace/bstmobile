@@ -6,6 +6,7 @@ import router           from "@/router";
 export default createStore({
   state() {
     return {
+      currYear: new Date(new Date().getTime()).toLocaleString("en-US",{year: "numeric"}),
       APIURL   : "https://bstpinanggriya.com/",
       // APIURL: "http://localhost:8080",
       // APIURL   : "https://t-gadgetcors.herokuapp.com/https://bsbl.herokuapp.com",
@@ -48,6 +49,9 @@ export default createStore({
     }
   },
   mutations: {
+    setCurrYear: function(state: any, value) {
+      state.currYear = value;
+    },
     setDataAlert: function(state: any, value) {
       state.dataAlert.show    = value.show;
       state.dataAlert.type    = value.type;
@@ -86,9 +90,8 @@ export default createStore({
       state.dataJenisSampah = value;
     }, 
     setDataGrafikSetor:  function(state: any, value) {      
-      state.dataGrafikSetor.date = value.date;
-      state.dataGrafikSetor.dataId = value.dataId;
       state.dataGrafikSetor.dataKg = value.dataKg;
+      state.dataGrafikSetor.dataMonth = value.dataMonth;
     }, 
     setHistoryTransDate:  function(state: any, value) {      
       state.historyTransDate.start = value.start;
@@ -190,12 +193,7 @@ export default createStore({
       })
     },
     getDataGrafikSetor: function ({ commit },refresher = "") {
-      const currentUnixTime = new Date(new Date().getTime());
-      const currMonth = currentUnixTime.toLocaleString("en-US",{month: "2-digit"});
-      const currYear  = currentUnixTime.toLocaleString("en-US",{year: "numeric"});
-      const currMonthString = currentUnixTime.toLocaleString("id-ID",{month: "long"});
-
-      axios.get(`${this.state.APIURL}/transaksi/getdata?start=01-${currMonth}-${currYear}&end=31-${currMonth}-${currYear}`,{
+      axios.get(`${this.state.APIURL}/transaksi/grafikssampah?year=${this.state.currYear}&tampilan=per-bulan`,{
         headers: {
             token: TokenService.getToken()!
           }
@@ -205,38 +203,30 @@ export default createStore({
           refresher.complete();
         }
 
-        const arrayId = [""] as any;
-        const arrayKg = [0] as any;
+        const arrayMonth   = [] as any;
+        const arrayKg      = [] as any;
         const allTransaksi = response.data.data;
-        
-        allTransaksi.forEach((t: any) => {
-          if (t.jenis_transaksi == 'penyetoran sampah') {
-            const date  = new Date(parseInt(t.date) * 1000);
-            const day   = date.toLocaleString("en-US",{day: "numeric"});
-            const month = date.toLocaleString("id-ID",{month: "long"});
 
-            if (month == currMonthString) {
-              arrayId.push("Tanggal "+day);
-              arrayKg.push(t.total_kg_setor);
-            }
-          } 
-        });
-
-        for (let i = arrayId.length; i < 8; i++) {
-          arrayId.push('');
+        for (const key in allTransaksi) {
+          arrayKg.push(allTransaksi[key].totSampahMasuk);
+          arrayMonth.push(key.substring(0,(Object.keys(allTransaksi).length) < 7 ? 10 : 4));
         }
 
+        if (arrayKg.length < 5) {
+          arrayKg.push('','');
+          arrayMonth.push('','');
+        }
+        
         commit("setDataGrafikSetor",{
-          date: `${currMonthString} ${currYear}`,
-          dataId: arrayId,
           dataKg: arrayKg,
+          dataMonth: arrayMonth,
         });
       })
       .catch(error => {
         if (refresher) {
           refresher.complete();
         }
-
+        
         // Unauthorize
         if (error.response.status == 401) {
           if (error.response.data.messages == 'token expired') {
@@ -254,8 +244,8 @@ export default createStore({
         }
         else if(error.response.status == 404) {
           commit("setDataGrafikSetor",{
-            date: `${currMonthString} ${currYear}`,
-            data: [],
+            dataKg: [],
+            dataMonth: [],
           });
         }
       })
